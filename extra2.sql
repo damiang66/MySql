@@ -178,7 +178,7 @@ select cliente.codigo_cliente, cliente.nombre_contacto,pago.codigo_cliente from 
 10. Devuelve un listado con los datos de los empleados que no tienen clientes asociados y el
 nombre de su jefe asociado.
 */
-select empleado.codigo_empleado, empleado.nombre from empleado left outer join cliente on cliente.codigo_empleado_rep_ventas=empleado.codigo_empleado where cliente.codigo_empleado_rep_ventas is null;
+select empleado.codigo_empleado, empleado.nombre, empleado.codigo_jefe from empleado left outer join cliente on cliente.codigo_empleado_rep_ventas=empleado.codigo_empleado where cliente.codigo_empleado_rep_ventas is null;
 -- Consultas resumen
 -- 1. ¿Cuántos empleados hay en la compañía?
 select count(codigo_empleado) from empleado;
@@ -197,3 +197,12 @@ select count(codigo_cliente) from cliente where ciudad='madrid';
 -- 8. ¿Calcula cuántos clientes tiene cada una de las ciudades que empiezan por M?
 select count(codigo_cliente) from cliente where ciudad like'm%';
 -- 9. Devuelve el nombre de los representantes de ventas y el número de clientes al que atiende cada uno.
+select cliente.codigo_cliente, empleado.nombre from cliente inner join empleado on empleado.codigo_empleado= cliente.codigo_empleado_rep_ventas;
+-- 10. Calcula el número de clientes que no tiene asignado representante de ventas.
+
+select count(empleado.codigo_empleado) from empleado left outer join cliente on empleado.codigo_empleado= cliente.codigo_empleado_rep_ventas where cliente.codigo_empleado_rep_ventas is null;
+-- 11. Calcula la fecha del primer y último pago realizado por cada uno de los clientes. El listado
+ -- mostrar el nombre y los apellidos de cada cliente.
+ select pago.fecha_pago as minimo, pago.fecha_pago as maximo, cliente.nombre_cliente, cliente.apellido_contacto,cliente.codigo_cliente from pago left join cliente on pago.codigo_cliente=cliente.codigo_cliente group by pago.fecha_pago ;
+ -- 12. Calcula el número de productos diferentes que hay en cada uno de los pedidos.
+ 
